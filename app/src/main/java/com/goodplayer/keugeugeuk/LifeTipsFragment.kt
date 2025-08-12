@@ -28,7 +28,10 @@ class LifeTipsFragment : Fragment() {
         binding.rvTips.layoutManager = LinearLayoutManager(requireContext())
         binding.rvTips.adapter = LifeTipAdapter(items) { tip ->
             val intent = Intent(requireContext(), TipDetailActivity::class.java)
-            intent.putExtra("tip_id", tip.id)
+            intent.putExtra("tip_title", tip.title)
+            intent.putExtra("tip_description", tip.summary)
+            intent.putExtra("tip_image", R.drawable.ic_launcher_foreground) // 샘플 이미지
+//            intent.putExtra("tip_id", tip.id)
             startActivity(intent)
         }
     }

@@ -1,5 +1,6 @@
 package com.goodplayer.keugeugeuk
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.goodplayer.keugeugeuk.databinding.ActivityTipDetailBinding
@@ -12,20 +13,30 @@ class TipDetailActivity : AppCompatActivity() {
         binding = ActivityTipDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val id = intent.getIntExtra("tip_id", 0)
-        when (id) {
-            0 -> {
-                binding.tvTitle.text = "아침 스트레칭 5분"
-                binding.tvBody.text = "상세: 가벼운 스트레칭 5가지..."
+        // Intent 데이터 받기
+        val title = intent.getStringExtra("tip_title") ?: "제목 없음"
+        val description = intent.getStringExtra("tip_description") ?: "내용 없음"
+        val imageRes = intent.getIntExtra("tip_image", R.drawable.ic_launcher_foreground) // 샘플이미지
+
+        // UI 반영
+        binding.tvTitle.text = title
+        binding.tvDescription.text = description
+        binding.ivTipImage.setImageResource(imageRes)
+
+        // 뒤로가기 버튼
+        binding.btnBack.setOnClickListener {
+            finish()
+        }
+
+        // 공유 버튼
+        binding.btnShare.setOnClickListener {
+            val shareText = "📌 $title\n\n$description"
+            val shareIntent = Intent().apply {
+                action = Intent.ACTION_SEND
+                putExtra(Intent.EXTRA_TEXT, shareText)
+                type = "text/plain"
             }
-            1 -> {
-                binding.tvTitle.text = "냉장고 정리 꿀팁"
-                binding.tvBody.text = "상세: 라벨링, 빠른 소비법 등..."
-            }
-            else -> {
-                binding.tvTitle.text = "간단 레시피"
-                binding.tvBody.text = "상세: 재료 준비와 조리법..."
-            }
+            startActivity(Intent.createChooser(shareIntent, "생활 팁 공유하기"))
         }
     }
 }
