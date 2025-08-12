@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView android:text="교환소" android:textStyle="bold" android:textSize="18sp"/>
-    <TextView android:id="@+id/tvMyPoints" android:layout_marginTop="8dp" android:text="0 P"/>
+    <TextView android:text="교환소" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textStyle="bold" android:textSize="18sp"/>
+    <TextView android:id="@+id/tvMyPoints" android:layout_marginTop="8dp" android:text="0 P" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
     <Button android:id="@+id/btnExchange1" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="스타벅스 아메리카노 (500P)" android:layout_marginTop="12dp"/>
 </LinearLayout>

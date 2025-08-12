@@ -8,8 +8,8 @@
     <LinearLayout android:padding="12dp" android:orientation="horizontal" android:layout_width="match_parent" android:layout_height="wrap_content">
         <View android:layout_width="64dp" android:layout_height="64dp" android:background="#DDD"/>
         <LinearLayout android:layout_marginLeft="12dp" android:orientation="vertical" android:layout_width="0dp" android:layout_weight="1">
-            <TextView android:id="@+id/tvTitle" android:text="타이틀" android:textStyle="bold"/>
-            <TextView android:id="@+id/tvSummary" android:text="요약" android:textSize="12sp" android:textColor="#555"/>
+            <TextView android:id="@+id/tvTitle" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="타이틀" android:textStyle="bold"/>
+            <TextView android:id="@+id/tvSummary" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="요약" android:textSize="12sp" android:textColor="#555"/>
         </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

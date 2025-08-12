@@ -11,20 +11,20 @@
         <Button android:id="@+id/btnScratch" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="크그극 긁기" android:layout_marginTop="12dp"/>
         <Button android:id="@+id/btnLifeTips" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="생활팁 보러가기" android:layout_marginTop="8dp"/>
 
-        <TextView android:layout_marginTop="16dp" android:text="생활팁 미리보기" android:textStyle="bold"/>
+        <TextView android:layout_marginTop="16dp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="생활팁 미리보기" android:textStyle="bold"/>
         <!-- 간단한 미리보기 카드 3개 -->
         <LinearLayout android:orientation="vertical" android:layout_width="match_parent" android:layout_height="wrap_content">
             <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:padding="8dp" android:background="#EEE" android:orientation="horizontal" android:layout_marginTop="8dp">
                 <View android:layout_width="64dp" android:layout_height="64dp" android:background="#CCC"/>
-                <TextView android:layout_marginLeft="8dp" android:text="생활팁 제목 #1" android:layout_gravity="center_vertical"/>
+                <TextView android:layout_marginLeft="8dp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="생활팁 제목 #1" android:layout_gravity="center_vertical"/>
             </LinearLayout>
             <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:padding="8dp" android:background="#EEE" android:orientation="horizontal" android:layout_marginTop="8dp">
                 <View android:layout_width="64dp" android:layout_height="64dp" android:background="#CCC"/>
-                <TextView android:layout_marginLeft="8dp" android:text="생활팁 제목 #2" android:layout_gravity="center_vertical"/>
+                <TextView android:layout_marginLeft="8dp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="생활팁 제목 #2" android:layout_gravity="center_vertical"/>
             </LinearLayout>
             <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:padding="8dp" android:background="#EEE" android:orientation="horizontal" android:layout_marginTop="8dp">
                 <View android:layout_width="64dp" android:layout_height="64dp" android:background="#CCC"/>
-                <TextView android:layout_marginLeft="8dp" android:text="생활팁 제목 #3" android:layout_gravity="center_vertical"/>
+                <TextView android:layout_marginLeft="8dp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="생활팁 제목 #3" android:layout_gravity="center_vertical"/>
             </LinearLayout>
         </LinearLayout>
 
