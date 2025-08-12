@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.goodplayer.keugeugeuk.databinding.FragmentLifetipsBinding
+import androidx.recyclerview.widget.LinearLayoutManager
 
 class LifeTipsFragment : Fragment() {
     private var _binding: FragmentLifetipsBinding? = null
@@ -24,6 +25,7 @@ class LifeTipsFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        binding.rvTips.layoutManager = LinearLayoutManager(requireContext())
         binding.rvTips.adapter = LifeTipAdapter(items) { tip ->
             val intent = Intent(requireContext(), TipDetailActivity::class.java)
             intent.putExtra("tip_id", tip.id)
