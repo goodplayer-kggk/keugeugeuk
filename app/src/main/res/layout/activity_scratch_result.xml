@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="24dp"
+    android:background="#FFFFFF">
+
+    <!-- 결과 아이콘 -->
+    <ImageView
+        android:id="@+id/ivResultIcon"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/ic_launcher_foreground"
+        android:contentDescription="@string/scratch_result_icon"
+        android:layout_marginBottom="16dp" />
+
+    <!-- 결과 텍스트 -->
+    <TextView
+        android:id="@+id/tvResultMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="축하합니다! 50포인트 적립"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="#333333"
+        android:layout_marginBottom="24dp" />
+
+    <!-- 공유 버튼 -->
+    <Button
+        android:id="@+id/btnShareResult"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="결과 공유하기"
+        android:layout_marginBottom="16dp" />
+
+    <!-- 홈으로 이동 버튼 -->
+    <Button
+        android:id="@+id/btnGoHome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="홈으로 돌아가기" />
+
+</LinearLayout>

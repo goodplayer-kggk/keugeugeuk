@@ -16,7 +16,7 @@ class TipDetailActivity : AppCompatActivity() {
         // Intent 데이터 받기
         val title = intent.getStringExtra("tip_title") ?: "제목 없음"
         val description = intent.getStringExtra("tip_description") ?: "내용 없음"
-        val imageRes = intent.getIntExtra("tip_image", R.drawable.ic_launcher_foreground) // 샘플이미지
+        val imageRes = intent.getIntExtra("tip_image", R.drawable.ic_launcher_foreground) //ic_tip_image 샘플이미지
 
         // UI 반영
         binding.tvTitle.text = title
