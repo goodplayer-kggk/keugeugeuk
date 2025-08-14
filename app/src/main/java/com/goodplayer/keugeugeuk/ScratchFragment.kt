@@ -1,10 +1,8 @@
 package com.goodplayer.keugeugeuk
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
@@ -15,7 +13,6 @@ import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.AdError
-import com.goodplayer.keugeugeuk.ScratchResultActivity
 
 class ScratchFragment : Fragment() {
 
@@ -25,45 +22,34 @@ class ScratchFragment : Fragment() {
 
     private var interstitialAd: InterstitialAd? = null
     private var isScratching = false
-    private val scratchThreshold = 0.2f // 20% 이상 긁으면 광고 실행
+    private val scratchThreshold = 0.4f // 20% 이상 긁으면 광고 실행
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentScratchBinding.inflate(inflater, container, false)
+
+        // 긁기 완료 리스너
+        binding.scratchView.scratchThreshold = scratchThreshold
+        binding.scratchView.setOnScratchCompleteListener { scratchedPercent ->
+            val reward = RewardGenerator.generateReward() // 2~10
+            pm.addPoints(reward)
+            showAdOrGoToResult(reward)
+        }
+
+        // "다시 긁기" 버튼이 있다면
+        binding.btnRetry.setOnClickListener {
+            binding.scratchView.resetScratch()
+        }
+
         return binding.root
     }
 
-    @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         loadInterstitialAd()
-
-        // 긁기 이벤트
-        binding.scratchView.setOnTouchListener { _, event ->
-            when (event.action) {
-                MotionEvent.ACTION_DOWN -> {
-                    isScratching = true
-                }
-                MotionEvent.ACTION_MOVE -> {
-                    if (isScratching) {
-                        binding.scratchView.handleTouch(event)
-                    }
-                }
-                MotionEvent.ACTION_UP -> {
-                    isScratching = false
-                    val scratchedPercent = binding.scratchView.getScratchedPercentage()
-                    if (scratchedPercent >= scratchThreshold) {
-                        val reward = RewardGenerator.generateReward() // 2..10
-                        pm.addPoints(reward)
-                        showAdOrGoToResult(reward)
-                    }
-                }
-            }
-            true
-        }
     }
 
     private fun loadInterstitialAd() {

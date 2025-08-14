@@ -1,32 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- 긁기 영역 -->
-    <com.goodplayer.keugeugeuk.ScratchView
-        android:id="@+id/scratchView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@drawable/scratch_overlay"
-    app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintEnd_toEndOf="parent" />
+    <!-- 스크래치 영역 -->
+    <FrameLayout
+        android:id="@+id/scratchContainer"
+        android:layout_width="280dp"
+        android:layout_height="280dp"
+        android:layout_marginTop="100dp"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/btnRetry"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintVertical_bias="0.66">
 
-    <!-- 긁기 완료 안내 텍스트 -->
-    <TextView
-        android:id="@+id/tvScratchHint"
+        <!-- 긁어서 보일 이미지 -->
+        <ImageView
+            android:id="@+id/scratchBackground"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/scratch_gold_image1" />
+
+        <!-- 긁을 수 있는 마스크 뷰 -->
+        <com.goodplayer.keugeugeuk.ScratchView
+            android:id="@+id/scratchView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </FrameLayout>
+
+    <!-- 다시하기 버튼 -->
+    <Button
+        android:id="@+id/btnRetry"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="긁어서 결과를 확인하세요"
-        android:textSize="18sp"
-        android:textColor="@android:color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:text="다시 긁기"
+        app:layout_constraintTop_toBottomOf="@id/scratchContainer"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
