@@ -21,8 +21,16 @@ class ScratchFragment : Fragment() {
     private val pm by lazy { PointsManager(requireContext()) }
 
     private var interstitialAd: InterstitialAd? = null
-    private var isScratching = false
     private val scratchThreshold = 0.4f // 20% 이상 긁으면 광고 실행
+
+    private val animalAnimations = listOf(
+        R.raw.animal_dog,
+        R.raw.animal_cat,
+        R.raw.animal_pig,
+        R.raw.animal_bear,
+        R.raw.animal_rabbit,
+        R.raw.animal_penguin
+    )
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,11 +46,7 @@ class ScratchFragment : Fragment() {
             showAdOrGoToResult(reward)
         }
 
-        // "다시 긁기" 버튼이 있다면
-        binding.btnRetry.setOnClickListener {
-            binding.scratchView.resetScratch()
-        }
-
+        showRandomAnimal()
         return binding.root
     }
 
@@ -93,6 +97,12 @@ class ScratchFragment : Fragment() {
             intent.putExtra("result_message", reward.toString()+"P 받았습니다.")
         startActivity(intent)
         requireActivity().finish()
+    }
+
+    private fun showRandomAnimal() {
+        val randomAnimal = animalAnimations.random()
+        binding.animalAnimation.setAnimation(randomAnimal)
+        binding.animalAnimation.playAnimation()
     }
 
     override fun onDestroyView() {

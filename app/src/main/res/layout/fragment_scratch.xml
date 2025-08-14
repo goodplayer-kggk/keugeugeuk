@@ -12,7 +12,7 @@
         android:layout_marginTop="100dp"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/btnRetry"
+        app:layout_constraintBottom_toTopOf="@+id/animalAnimation"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintVertical_bias="0.66">
@@ -32,15 +32,16 @@
             android:layout_height="match_parent" />
     </FrameLayout>
 
-    <!-- 다시하기 버튼 -->
-    <Button
-        android:id="@+id/btnRetry"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="다시 긁기"
+    <!-- 동물 애니메이션 (Lottie) -->
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/animalAnimation"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        app:lottie_loop="true"
+        app:lottie_autoPlay="true"
         app:layout_constraintTop_toBottomOf="@id/scratchContainer"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
