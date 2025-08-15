@@ -1,4 +1,4 @@
-package com.goodplayer.keugeugeuk
+package com.goodplayer.keugeugeuk.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
+import com.goodplayer.keugeugeuk.data.PointsManager
 import com.goodplayer.keugeugeuk.databinding.FragmentRewardsBinding
 
 class RewardsFragment : Fragment() {

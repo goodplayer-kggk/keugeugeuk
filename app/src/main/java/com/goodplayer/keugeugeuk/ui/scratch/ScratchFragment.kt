@@ -1,4 +1,4 @@
-package com.goodplayer.keugeugeuk
+package com.goodplayer.keugeugeuk.ui.scratch
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,6 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.goodplayer.keugeugeuk.R
+import com.goodplayer.keugeugeuk.data.PointsManager
+import com.goodplayer.keugeugeuk.data.RewardGenerator
 import com.goodplayer.keugeugeuk.databinding.FragmentScratchBinding
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.interstitial.InterstitialAd

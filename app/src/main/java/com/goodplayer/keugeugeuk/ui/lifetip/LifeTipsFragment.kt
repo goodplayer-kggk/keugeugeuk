@@ -1,4 +1,4 @@
-package com.goodplayer.keugeugeuk
+package com.goodplayer.keugeugeuk.ui.lifetip
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.goodplayer.keugeugeuk.databinding.FragmentLifetipsBinding
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.goodplayer.keugeugeuk.R
+import com.goodplayer.keugeugeuk.data.LifeTip
 
 class LifeTipsFragment : Fragment() {
     private var _binding: FragmentLifetipsBinding? = null

@@ -1,4 +1,4 @@
-package com.goodplayer.keugeugeuk
+package com.goodplayer.keugeugeuk.data
 
 import android.content.Context
 import com.google.gson.Gson

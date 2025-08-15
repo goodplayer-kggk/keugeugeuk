@@ -1,4 +1,4 @@
-package com.goodplayer.keugeugeuk
+package com.goodplayer.keugeugeuk.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.goodplayer.keugeugeuk.data.PointsManager
 import com.goodplayer.keugeugeuk.databinding.FragmentExchangeBinding
 
 class ExchangeFragment : Fragment() {
@@ -24,7 +25,11 @@ class ExchangeFragment : Fragment() {
         binding.btnExchange1.setOnClickListener {
             val cost = 500
             if (pm.consumePoints(cost, "Exchange: 스타벅스 아메리카노")) {
-                Toast.makeText(requireContext(), "교환 신청 완료 (샘플). 관리자 확인 후 쿠폰 발송", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(),
+                    "교환 신청 완료 (샘플). 관리자 확인 후 쿠폰 발송",
+                    Toast.LENGTH_SHORT
+                ).show()
                 binding.tvMyPoints.text = "${pm.getPoints()} P"
             } else {
                 Toast.makeText(requireContext(), "포인트 부족", Toast.LENGTH_SHORT).show()

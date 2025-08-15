@@ -1,4 +1,4 @@
-package com.goodplayer.keugeugeuk
+package com.goodplayer.keugeugeuk.ui.scratch
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,6 +6,8 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.goodplayer.keugeugeuk.MainActivity
+import com.goodplayer.keugeugeuk.R
 
 class ScratchResultActivity : AppCompatActivity() {
 

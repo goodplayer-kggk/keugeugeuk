@@ -1,12 +1,15 @@
-package com.goodplayer.keugeugeuk
+package com.goodplayer.keugeugeuk.ui
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.goodplayer.keugeugeuk.MainActivity
+import com.goodplayer.keugeugeuk.data.PointsManager
 import com.goodplayer.keugeugeuk.databinding.FragmentHomeBinding
+import com.goodplayer.keugeugeuk.ui.lifetip.LifeTipsFragment
+import com.goodplayer.keugeugeuk.ui.scratch.ScratchFragment
 
 class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null

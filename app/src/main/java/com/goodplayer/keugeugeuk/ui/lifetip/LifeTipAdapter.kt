@@ -1,8 +1,9 @@
-package com.goodplayer.keugeugeuk
+package com.goodplayer.keugeugeuk.ui.lifetip
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.goodplayer.keugeugeuk.data.LifeTip
 import com.goodplayer.keugeugeuk.databinding.ItemLifetipBinding
 
 class LifeTipAdapter(private val items: List<LifeTip>, private val onClick: (LifeTip)->Unit) :
@@ -16,7 +17,13 @@ class LifeTipAdapter(private val items: List<LifeTip>, private val onClick: (Lif
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = VH(ItemLifetipBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = VH(
+        ItemLifetipBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
+        )
+    )
     override fun onBindViewHolder(holder: VH, position: Int) = holder.bind(items[position])
     override fun getItemCount() = items.size
 }
