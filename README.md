@@ -6,26 +6,26 @@ Lottie 애니메이션을 활용해 긁기 완료 시 다양한 동물 캐릭터
 ## 📂 프로젝트 구조
 ```
 app/src/main/java/com/keugeugeuk/
-  ui/                 # UI 레이어 (Activity, Fragment, View)
+  MainActivity.kt
+  ui/
     scratch/
       ScratchFragment.kt
       ScratchActivity.kt
       ScratchView.kt
-  data/               # 데이터 레이어 (Model, Repository)
-    model/
-      ScratchResult.kt
-    repository/
-      ScratchRepository.kt
-  domain/             # 비즈니스 로직 (UseCase)
-    GetScratchResultUseCase.kt
-  util/               # 공통 유틸
-    ScreenUtils.kt
-  animation/          # Lottie JSON
-    animals/
-      dog.json
-      cat.json
-      pig.json
-      bear.json
+    lifetip/
+      LifeTipAdapter.kt
+      LifeTipsFragment.kt
+      TipDetailActivity.kt
+    ExchangeFragment.kt
+    HomeFragment.kt
+    RewardsFragment.kt
+  data/
+    AdManager.kt
+    LifeTip.kt
+    PointHistory.kt
+    PointsManager.kt
+    RewardGenerator.kt
+
 ```
 
 ## 🚀 주요 기능
