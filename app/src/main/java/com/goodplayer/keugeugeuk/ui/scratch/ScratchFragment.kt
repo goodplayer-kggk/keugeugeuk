@@ -7,8 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.goodplayer.keugeugeuk.R
-import com.goodplayer.keugeugeuk.data.PointsManager
-import com.goodplayer.keugeugeuk.data.RewardGenerator
+import com.goodplayer.keugeugeuk.util.PointsManager
+import com.goodplayer.keugeugeuk.util.PointGenerator
 import com.goodplayer.keugeugeuk.databinding.FragmentScratchBinding
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.interstitial.InterstitialAd
@@ -44,7 +44,7 @@ class ScratchFragment : Fragment() {
         // 긁기 완료 리스너
         binding.scratchView.scratchThreshold = scratchThreshold
         binding.scratchView.setOnScratchCompleteListener { scratchedPercent ->
-            val reward = RewardGenerator.generateReward() // 2~10
+            val reward = PointGenerator.generatePoint() // 2~10
             pm.addPoints(reward)
             showAdOrGoToResult(reward)
         }

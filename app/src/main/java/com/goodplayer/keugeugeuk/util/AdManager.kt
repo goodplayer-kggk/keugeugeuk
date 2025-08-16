@@ -1,4 +1,4 @@
-package com.goodplayer.keugeugeuk.data
+package com.goodplayer.keugeugeuk.util
 
 import kotlinx.coroutines.delay
 

@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">keugeugeuk</string>
     <string name="scratch_result_icon">value of reward</string>
+    <string name="exchange_points_default">보유 포인트: 0 P</string>
+    <string name="exchange_points_fmt">보유 포인트: %1$d P</string>
 </resources>

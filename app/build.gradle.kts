@@ -52,6 +52,12 @@ dependencies {
     implementation ("com.google.code.gson:gson:2.10.1")
     implementation ("com.google.android.gms:play-services-ads:23.1.0")
     implementation ("com.airbnb.android:lottie:6.6.7")
+    implementation ("androidx.recyclerview:recyclerview:1.3.2")
+    implementation ("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+    implementation ("com.google.android.material:material:1.12.0")
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.4")
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1")
+    implementation ("androidx.fragment:fragment-ktx:1.8.9")
 
 //    implementation(libs.androidx.core.ktx)
 //    implementation(libs.androidx.appcompat)

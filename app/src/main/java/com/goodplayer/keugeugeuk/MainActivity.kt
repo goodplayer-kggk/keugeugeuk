@@ -7,7 +7,7 @@ import androidx.fragment.app.Fragment
 import com.goodplayer.keugeugeuk.ui.RewardsFragment
 import com.goodplayer.keugeugeuk.ui.scratch.ScratchFragment
 import com.goodplayer.keugeugeuk.databinding.ActivityMainBinding
-import com.goodplayer.keugeugeuk.ui.ExchangeFragment
+import com.goodplayer.keugeugeuk.ui.exchange.ExchangeFragment
 import com.goodplayer.keugeugeuk.ui.HomeFragment
 import com.goodplayer.keugeugeuk.ui.lifetip.LifeTipsFragment
 import com.google.android.gms.ads.MobileAds

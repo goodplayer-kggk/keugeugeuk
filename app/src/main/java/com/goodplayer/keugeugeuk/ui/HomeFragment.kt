@@ -6,8 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.goodplayer.keugeugeuk.MainActivity
-import com.goodplayer.keugeugeuk.data.PointsManager
+import com.goodplayer.keugeugeuk.util.PointsManager
 import com.goodplayer.keugeugeuk.databinding.FragmentHomeBinding
+import com.goodplayer.keugeugeuk.ui.exchange.ExchangeFragment
 import com.goodplayer.keugeugeuk.ui.lifetip.LifeTipsFragment
 import com.goodplayer.keugeugeuk.ui.scratch.ScratchFragment
 
