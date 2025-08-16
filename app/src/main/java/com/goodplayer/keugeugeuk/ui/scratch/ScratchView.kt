@@ -18,12 +18,11 @@ class ScratchView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
 ) : View(context, attrs) {
 
-//    interface OnScratchCompleteListener {
-//        fun onScratchComplete()
-//    }
+    interface OnScratchCompleteListener {
+        fun onScratchComplete()
+    }
 
-//    private var scratchCompleteListener: OnScratchCompleteListener? = null
-    private var listener: ((Float) -> Unit)? = null
+    private var scratchCompleteListener: OnScratchCompleteListener? = null
     private var overlayBitmap: Bitmap
     private var overlayCanvas: Canvas
     private val overlayPaint: Paint
@@ -124,16 +123,12 @@ class ScratchView @JvmOverloads constructor(
             val scratchedPercent = getScratchedPercentage()
             if (scratchedPercent >= scratchThreshold) {
                 isCompleted = true
-//                scratchCompleteListener?.onScratchComplete()
-                listener?.invoke(scratchedPercent)
+                scratchCompleteListener?.onScratchComplete()
             }
         }
     }
 
-//    fun setOnScratchCompleteListener(listener: OnScratchCompleteListener) {
-//        this.scratchCompleteListener = listener
-//    }
-    fun setOnScratchCompleteListener(l: (Float) -> Unit) {
-        listener = l
+    fun setOnScratchCompleteListener(listener: OnScratchCompleteListener) {
+        this.scratchCompleteListener = listener
     }
 }

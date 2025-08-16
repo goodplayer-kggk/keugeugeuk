@@ -22,9 +22,7 @@ class ScratchFragment : Fragment() {
     private var _binding: FragmentScratchBinding? = null
     private val binding get() = _binding!!
     private val pm by lazy { PointsManager(requireContext()) }
-
     private var interstitialAd: InterstitialAd? = null
-    private val scratchThreshold = 0.4f // 20% 이상 긁으면 광고 실행
 
     private val animalAnimations = listOf(
         R.raw.animal_dog,
@@ -42,11 +40,13 @@ class ScratchFragment : Fragment() {
         _binding = FragmentScratchBinding.inflate(inflater, container, false)
 
         // 긁기 완료 리스너
-        binding.scratchView.scratchThreshold = scratchThreshold
-        binding.scratchView.setOnScratchCompleteListener { scratchedPercent ->
-            val reward = PointGenerator.generatePoint() // 2~10
-            pm.addPoints(reward)
-            showAdOrGoToResult(reward)
+        binding.scratchView.apply {
+            scratchThreshold = 20f // 원하는 퍼센트 기준
+            setOnScratchCompleteListener(object : ScratchView.OnScratchCompleteListener {
+                override fun onScratchComplete() {
+                    showAdOrGoToResult()
+                }
+            })
         }
 
         showRandomAnimal()
@@ -77,10 +77,12 @@ class ScratchFragment : Fragment() {
         )
     }
 
-    private fun showAdOrGoToResult(reward:Int) {
+    private fun showAdOrGoToResult() {
         if (interstitialAd != null) {
             interstitialAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
                 override fun onAdDismissedFullScreenContent() {
+                    val reward = PointGenerator.generatePoint()
+                    pm.addPoints(reward)
                     goToResult(reward)
                 }
 
