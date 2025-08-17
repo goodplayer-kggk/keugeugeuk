@@ -17,6 +17,7 @@
             android:value="ca-app-pub-3940256099942544~3347511713"/>
         <activity android:name=".ui.lifetip.TipDetailActivity" />
         <activity android:name=".ui.scratch.ScratchResultActivity" />
+        <activity android:name=".ui.settings.SettingActivity" />
         <activity
             android:name=".MainActivity"
             android:exported="true">

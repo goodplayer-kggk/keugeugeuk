@@ -5,12 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.goodplayer.keugeugeuk.MainActivity
+import com.goodplayer.keugeugeuk.R
 import com.goodplayer.keugeugeuk.util.PointsManager
 import com.goodplayer.keugeugeuk.databinding.FragmentHomeBinding
-import com.goodplayer.keugeugeuk.ui.exchange.ExchangeFragment
-import com.goodplayer.keugeugeuk.ui.lifetip.LifeTipsFragment
-import com.goodplayer.keugeugeuk.ui.scratch.ScratchFragment
 
 class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
@@ -25,17 +24,16 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         updatePoints()
         binding.btnScratch.setOnClickListener {
-            // 탭해서 긁기 화면으로 전환 — MainActivity에서 BottomNav를 통해 전환 가능, 또는 명시적 호출
-            (activity as? MainActivity)?.replaceFragment(ScratchFragment()) // helper
+            findNavController().navigate(R.id.scratchFragment)
         }
         binding.btnLifeTips.setOnClickListener {
-            (activity as? MainActivity)?.replaceFragment(LifeTipsFragment())
+            findNavController().navigate(R.id.lifeTipsFragment)
         }
         binding.btnRewards.setOnClickListener {
-            (activity as? MainActivity)?.replaceFragment(RewardsFragment())
+            findNavController().navigate(R.id.rewardsFragment)
         }
         binding.btnExchange.setOnClickListener {
-            (activity as? MainActivity)?.replaceFragment(ExchangeFragment())
+            findNavController().navigate(R.id.exchangeFragment)
         }
     }
 
