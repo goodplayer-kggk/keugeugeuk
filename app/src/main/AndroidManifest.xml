@@ -19,6 +19,7 @@
         <activity android:name=".ui.scratch.ScratchResultActivity" />
         <activity android:name=".ui.settings.SettingActivity" />
         <activity android:name=".auth.LoginActivity" />
+        <activity android:name=".auth.SignUpActivity" />
         <activity
             android:name=".SplashActivity"
             android:exported="true">

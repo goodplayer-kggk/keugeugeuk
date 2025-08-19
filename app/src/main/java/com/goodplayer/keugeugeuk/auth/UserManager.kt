@@ -3,56 +3,48 @@ package com.goodplayer.keugeugeuk.auth
 import android.content.Context
 import android.content.SharedPreferences
 
-class UserManager(context: Context) {
-    private val prefs: SharedPreferences =
-        context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+object UserManager {
+    private const val PREF_NAME = "user_prefs"
+    private const val KEY_USERNAME = "username"
+    private const val KEY_PASSWORD = "password"
+    private const val KEY_LOGGED_IN = "logged_in"
 
-    companion object {
-        private const val KEY_LOGGED_IN_USER = "logged_in_user"
-        private const val KEY_USER_ID = "user_id"
-        private const val KEY_USER_PASSWORD = "user_pw"
+    private lateinit var prefs: SharedPreferences
+
+    fun init(context: Context) {
+        prefs = context.applicationContext.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
     }
 
-    fun login(userId: String, password: String): Boolean {
-        val savedId = prefs.getString(KEY_USER_ID, null)
-        val savedPw = prefs.getString(KEY_USER_PASSWORD, null)
+    fun isLoggedIn(): Boolean {
+        return prefs.getBoolean(KEY_LOGGED_IN, false)
+    }
 
-        return if (savedId == userId && savedPw == password) {
-            prefs.edit().putBoolean(KEY_LOGGED_IN_USER, true).apply()
+    fun login(username: String, password: String): Boolean {
+        val savedUser = prefs.getString(KEY_USERNAME, null)
+        val savedPw = prefs.getString(KEY_PASSWORD, null)
+
+        return if (savedUser == username && savedPw == password) {
+            prefs.edit().putBoolean(KEY_LOGGED_IN, true).apply()
             true
         } else {
             false
         }
     }
 
-    fun signup(userId: String, password: String): Boolean {
-        if (prefs.contains(KEY_USER_ID)) {
-            return false // 이미 존재하는 계정
+    fun signup(username: String, password: String): Boolean {
+        val savedUser = prefs.getString(KEY_USERNAME, null)
+        return if (savedUser == null) {
+            prefs.edit()
+                .putString(KEY_USERNAME, username)
+                .putString(KEY_PASSWORD, password)
+                .apply()
+            true
+        } else {
+            false // 이미 아이디가 존재
         }
-        prefs.edit()
-            .putString(KEY_USER_ID, userId)
-            .putString(KEY_USER_PASSWORD, password)
-            .apply()
-        return true
     }
 
-    fun logout(context: Context) {
-        prefs.edit().clear().apply()
-    }
-
-    fun setLoggedInUser(userId: String) {
-        prefs.edit().putString(KEY_LOGGED_IN_USER, userId).apply()
-    }
-
-    fun getLoggedInUser(): String? {
-        return prefs.getString(KEY_LOGGED_IN_USER, null)
-    }
-
-    fun clearUser() {
-        prefs.edit().remove(KEY_LOGGED_IN_USER).apply()
-    }
-
-    fun isLoggedIn(): Boolean {
-        return getLoggedInUser() != null
+    fun logout() {
+        prefs.edit().putBoolean(KEY_LOGGED_IN, false).apply()
     }
 }

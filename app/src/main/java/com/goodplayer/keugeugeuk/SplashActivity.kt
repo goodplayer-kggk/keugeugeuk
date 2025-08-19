@@ -9,16 +9,16 @@ import com.goodplayer.keugeugeuk.auth.LoginActivity
 import com.goodplayer.keugeugeuk.auth.UserManager
 
 class SplashActivity : AppCompatActivity() {
-    private lateinit var userManager: UserManager
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
 
-        userManager = UserManager(this)
+        // ✅ UserManager 초기화 (앱 전역에서 SharedPreferences 접근 가능)
+        UserManager.init(applicationContext)
+
         // 1.5초 후 실행 (로고 애니메이션 시간용)
         Handler(Looper.getMainLooper()).postDelayed({
-            if (userManager.isLoggedIn()) {
+            if (UserManager.isLoggedIn()) {
                 // 로그인 되어 있으면 메인으로
                 startActivity(Intent(this, MainActivity::class.java))
             } else {
