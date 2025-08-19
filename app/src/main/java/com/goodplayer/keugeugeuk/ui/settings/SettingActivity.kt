@@ -1,11 +1,15 @@
 package com.goodplayer.keugeugeuk.ui.settings
 
+
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.goodplayer.keugeugeuk.databinding.ActivitySettingBinding
 import com.goodplayer.keugeugeuk.R
+import com.goodplayer.keugeugeuk.auth.LoginActivity
+import com.goodplayer.keugeugeuk.auth.UserManager
 
 class SettingActivity : AppCompatActivity() {
 
@@ -38,7 +42,26 @@ class SettingActivity : AppCompatActivity() {
 
         val adapter = SettingAdapter(items) { item ->
             when(item) {
-                is SettingItem.Normal -> Toast.makeText(this, "${item.title} 클릭됨", Toast.LENGTH_SHORT).show()
+                is SettingItem.Normal -> {
+                    when (item.title) {
+                        "긁는 소리 변경" -> Toast.makeText(this, "${item.title} 클릭됨", Toast.LENGTH_SHORT).show()
+                        "배경 음악 변경" -> Toast.makeText(this, "${item.title} 클릭됨", Toast.LENGTH_SHORT).show()
+                        "회원정보 수정" -> Toast.makeText(this, "${item.title} 클릭됨", Toast.LENGTH_SHORT).show()
+                        "로그아웃" -> {
+                            Toast.makeText(this, "${item.title} 클릭됨", Toast.LENGTH_SHORT).show()
+                            UserManager.logout()
+                            navigateToLogin()
+                        }
+                        "회원 탈퇴" -> {
+                            Toast.makeText(this, "${item.title} 클릭됨", Toast.LENGTH_SHORT).show()
+                            UserManager.deleteAccount()
+                            navigateToLogin()
+                        }
+                        "공지사항" -> Toast.makeText(this, "${item.title} 클릭됨", Toast.LENGTH_SHORT).show()
+                        "도움말 / FAQ" -> Toast.makeText(this, "${item.title} 클릭됨", Toast.LENGTH_SHORT).show()
+                        "앱 버전" -> Toast.makeText(this, "${item.title} 클릭됨", Toast.LENGTH_SHORT).show()
+                    }
+                }
                 is SettingItem.Switch -> Toast.makeText(this, "${item.title} : ${item.isChecked}", Toast.LENGTH_SHORT).show()
                 else -> {}
             }
@@ -46,6 +69,13 @@ class SettingActivity : AppCompatActivity() {
 
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
         binding.recyclerView.adapter = adapter
+    }
+
+    private fun navigateToLogin() {
+        startActivity(Intent(this, LoginActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+        })
+        finish()
     }
 
     override fun onSupportNavigateUp(): Boolean {
