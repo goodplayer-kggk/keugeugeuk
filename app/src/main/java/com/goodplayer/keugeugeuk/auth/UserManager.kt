@@ -13,13 +13,19 @@ import com.google.android.libraries.identity.googleid.GetSignInWithGoogleOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import kotlinx.coroutines.*
 import com.goodplayer.keugeugeuk.R
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import com.kakao.sdk.user.UserApiClient
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 object UserManager {
     private const val PREF_NAME = "user_prefs"
     private const val KEY_IS_LOGGED_IN = "is_logged_in"
     private const val KEY_USERNAME = "username"
     private const val KEY_PASSWORD = "password"
-    private const val KEY_POINT = "point"
+    private const val KEY_USER_POINT = "user_point"
+    private const val KEY_USER_HISTORY = "user_history"
     private const val KEY_SOCIAL_PROVIDER = "social_provider"
     private const val KEY_USER_TOKEN = "user_token"
 
@@ -86,16 +92,23 @@ object UserManager {
     // ✅ Kakao 로그인 처리 (SDK 사용 예시)
     private suspend fun signInWithKakao(activity: Activity): Boolean {
         return try {
-//            val token = withContext(Dispatchers.IO) {
-//                suspendCoroutine<String?> { cont ->
-//                    UserApiClient.instance.loginWithKakaoAccount(activity) { token, error ->
-//                        if (error != null) cont.resume(null)
-//                        else cont.resume(token?.accessToken)
-//                    }
-//                }
-//            } ?: return false
-//
-//            saveLoginState("kakao", token)
+            val token = withContext(Dispatchers.IO) {
+                suspendCoroutine<String?> { cont ->
+                    if (UserApiClient.instance.isKakaoTalkLoginAvailable(activity)) {
+                        UserApiClient.instance.loginWithKakaoTalk(activity) { token, error ->
+                            if (error != null) cont.resume(null)
+                            else cont.resume(token?.accessToken)
+                        }
+                    } else {
+                        UserApiClient.instance.loginWithKakaoAccount(activity) { token, error ->
+                            if (error != null) cont.resume(null)
+                            else cont.resume(token?.accessToken)
+                        }
+                    }
+                }
+            } ?: return false
+
+            saveLoginState("kakao", token)
             true
         } catch (e: Exception) {
             Log.e("UserManager", "Kakao login failed: ${e.message}")
@@ -113,7 +126,9 @@ object UserManager {
                     val credentialManager = CredentialManager.create(activity.applicationContext)
                     CoroutineScope(Dispatchers.Main).launch {
                         try {
-                            credentialManager.clearCredentialState(request = ClearCredentialStateRequest())
+                            credentialManager.clearCredentialState(
+                                request = ClearCredentialStateRequest()
+                            )
                             Log.d("UserManager", "requested to googel to clear credential")
                         } catch (e: Exception) {
                             Log.d("UserManager", "clearCredential error: ${e.message}")
@@ -121,14 +136,22 @@ object UserManager {
                     }
                 }
                 "kakao" -> {
-
+                    UserApiClient.instance.logout { error ->
+                        if (error != null) {
+                            Log.e("UserManager", "Kakao logout failed: ${error.message}")
+                        } else {
+                            Log.d("UserManager", "Kakao logout success")
+                        }
+                    }
                 }
             }
-            prefs.edit().remove(KEY_SOCIAL_PROVIDER)
-            prefs.edit().remove(KEY_USER_TOKEN)
-        }
-
-        prefs.edit().putBoolean(KEY_IS_LOGGED_IN, false).apply()
+            prefs.edit()
+                .remove(KEY_SOCIAL_PROVIDER)
+                .remove(KEY_USER_TOKEN)
+                .putBoolean(KEY_IS_LOGGED_IN, false)
+                .apply()
+        } else
+            prefs.edit().putBoolean(KEY_IS_LOGGED_IN, false).apply()
     }
 
     fun saveLoginState(provider: String, idToken: String) {
@@ -152,19 +175,69 @@ object UserManager {
         }
     }
 
-    fun deleteAccount() {
+    @SuppressLint("CommitPrefEdits")
+    fun deleteAccount(activity: Activity) {
+        val provider = prefs.getString(KEY_SOCIAL_PROVIDER, null)
+        if (!provider.isNullOrBlank()) {
+            when (provider) {
+                "google" -> {
+                    // 구글은 별도 unlink 개념 없음, credential만 정리
+                    val credentialManager = CredentialManager.create(activity.applicationContext)
+                    CoroutineScope(Dispatchers.Main).launch {
+                        try {
+                            credentialManager.clearCredentialState(
+                                request = ClearCredentialStateRequest()
+                            )
+                            Log.d("UserManager", "Google account cleared")
+                        } catch (e: Exception) {
+                            Log.d("UserManager", "Google deleteAccount error: ${e.message}")
+                        }
+                    }
+                }
+                "kakao" -> {
+                    UserApiClient.instance.unlink { error ->
+                        if (error != null) {
+                            Log.e("UserManager", "Kakao unlink failed: ${error.message}")
+                        } else {
+                            Log.d("UserManager", "Kakao unlink success")
+                        }
+                    }
+                }
+            }
+        }
+
+        // 공통 처리 (앱 내 저장 데이터 초기화)
         prefs.edit().clear().apply()
+        Log.d("UserManager", "Local user data cleared")
     }
 
-    // 포인트 관리
-    fun getPoint(): Int = prefs.getInt(KEY_POINT, 0)
+    // --- 포인트 관리 ---
+    fun getPoint(): Int = prefs.getInt(KEY_USER_POINT, 0)
 
-    fun addPoint(amount: Int) {
+    fun addPoint(value: Int) {
         val current = getPoint()
-        prefs.edit().putInt(KEY_POINT, current + amount).apply()
+        prefs.edit().putInt(KEY_USER_POINT, current + value).apply()
     }
 
     fun resetPoint() {
-        prefs.edit().putInt(KEY_POINT, 0).apply()
+        prefs.edit().putInt(KEY_USER_POINT, 0).apply()
+    }
+
+    // --- 히스토리 관리 ---
+    fun getHistory(): List<String> {
+        val json = prefs.getString(KEY_USER_HISTORY, "[]")
+        val type = object : TypeToken<List<String>>() {}.type
+        return Gson().fromJson(json, type)
+    }
+
+    fun addHistory(entry: String) {
+        val list = getHistory().toMutableList()
+        list.add(entry)
+        val json = Gson().toJson(list)
+        prefs.edit().putString(KEY_USER_HISTORY, json).apply()
+    }
+
+    fun clearHistory() {
+        prefs.edit().putString(KEY_USER_HISTORY, "[]").apply()
     }
 }

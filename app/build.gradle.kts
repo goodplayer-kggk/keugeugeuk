@@ -63,9 +63,12 @@ dependencies {
     implementation ("androidx.credentials:credentials:1.2.0")
     implementation ("androidx.credentials:credentials-play-services-auth:1.2.0")
 
-    implementation(libs.androidx.navigation.fragment)
-    implementation(libs.androidx.navigation.ui.ktx)
-    implementation(libs.googleid)
+    implementation (libs.androidx.navigation.fragment)
+    implementation (libs.androidx.navigation.ui.ktx)
+    implementation (libs.googleid)
+
+    implementation ("com.kakao.sdk:v2-user:2.21.6")
+    implementation ("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.0")
 
 //    implementation(libs.androidx.core.ktx)
 //    implementation(libs.androidx.appcompat)

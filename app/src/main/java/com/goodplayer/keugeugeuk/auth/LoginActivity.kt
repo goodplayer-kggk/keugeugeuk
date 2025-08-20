@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.goodplayer.keugeugeuk.ui.GuestActivity
 import com.goodplayer.keugeugeuk.MainActivity
 import com.goodplayer.keugeugeuk.R
 import kotlinx.coroutines.*
@@ -90,8 +91,8 @@ class LoginActivity : AppCompatActivity() {
 
         // 게스트 모드 버튼
         btnGuest.setOnClickListener {
-            Toast.makeText(this, "게스트 모드 (제한적 이용)", Toast.LENGTH_SHORT).show()
-            goToMain()
+            Toast.makeText(this, "게스트 모드 (앱 가이드 영상 시청)", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this, GuestActivity::class.java))
         }
     }
 

@@ -15,11 +15,15 @@
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-3940256099942544~3347511713"/>
+        <meta-data
+            android:name="com.kakao.sdk.AppKey"
+            android:value="@string/kakao_native_app_key"/>
         <activity android:name=".ui.lifetip.TipDetailActivity" />
         <activity android:name=".ui.scratch.ScratchResultActivity" />
         <activity android:name=".ui.settings.SettingActivity" />
         <activity android:name=".auth.LoginActivity" />
         <activity android:name=".auth.SignUpActivity" />
+        <activity android:name=".ui.GuestActivity" />
         <activity
             android:name=".SplashActivity"
             android:exported="true">

@@ -7,11 +7,14 @@ import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import com.goodplayer.keugeugeuk.auth.LoginActivity
 import com.goodplayer.keugeugeuk.auth.UserManager
+import com.kakao.sdk.common.KakaoSdk
 
 class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
+
+        KakaoSdk.init(this, getString(R.string.kakao_native_app_key))
 
         // ✅ UserManager 초기화 (앱 전역에서 SharedPreferences 접근 가능)
         UserManager.init(applicationContext)

@@ -4,6 +4,7 @@ package com.goodplayer.keugeugeuk.ui.settings
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.goodplayer.keugeugeuk.databinding.ActivitySettingBinding
@@ -53,9 +54,16 @@ class SettingActivity : AppCompatActivity() {
                             navigateToLogin()
                         }
                         "회원 탈퇴" -> {
-                            Toast.makeText(this, "${item.title} 클릭됨", Toast.LENGTH_SHORT).show()
-                            UserManager.deleteAccount()
-                            navigateToLogin()
+                            AlertDialog.Builder(this)
+                                .setTitle("회원 탈퇴")
+                                .setMessage("정말로 탈퇴하시겠습니까?\n탈퇴 시 모든 데이터가 삭제됩니다.")
+                                .setPositiveButton("탈퇴") { _, _ ->
+                                    Toast.makeText(this, "회원 탈퇴 처리 중...", Toast.LENGTH_SHORT).show()
+                                    UserManager.deleteAccount(this@SettingActivity)
+                                    navigateToLogin()
+                                }
+                                .setNegativeButton("취소", null)
+                                .show()
                         }
                         "공지사항" -> Toast.makeText(this, "${item.title} 클릭됨", Toast.LENGTH_SHORT).show()
                         "도움말 / FAQ" -> Toast.makeText(this, "${item.title} 클릭됨", Toast.LENGTH_SHORT).show()
