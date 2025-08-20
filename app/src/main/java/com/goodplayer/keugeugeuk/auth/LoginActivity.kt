@@ -7,8 +7,10 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.goodplayer.keugeugeuk.MainActivity
 import com.goodplayer.keugeugeuk.R
+import kotlinx.coroutines.*
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var etUsername: EditText
@@ -31,9 +33,12 @@ class LoginActivity : AppCompatActivity() {
 
         etUsername = findViewById(R.id.editTextId)
         etPassword = findViewById(R.id.editTextPassword)
+
         val btnLogin: Button = findViewById(R.id.btnLogin)
+        val btnGoogle: Button = findViewById(R.id.btnGoogle)
+        val btnKakao: Button = findViewById(R.id.btnKakao)
         val btnSignUp: Button = findViewById(R.id.btnSignup)
-        val btnGuest = findViewById<Button>(R.id.btnGuest)
+        val btnGuest: Button = findViewById(R.id.btnGuest)
 
         btnLogin.setOnClickListener {
             val username = etUsername.text.toString().trim()
@@ -54,6 +59,30 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
+        btnGoogle.setOnClickListener {
+            lifecycleScope.launch {
+                val success = UserManager.loginSocial("google", this@LoginActivity)
+                if (success) {
+                    goToMain()
+                    finish()
+                } else {
+                    Toast.makeText(this@LoginActivity, "Google 로그인 실패", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+
+        btnKakao.setOnClickListener {
+            lifecycleScope.launch {
+                val success = UserManager.loginSocial("kakao", this@LoginActivity)
+                if (success) {
+                    goToMain()
+                    finish()
+                } else {
+                    Toast.makeText(this@LoginActivity, "Kakao 로그인 실패", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+
         btnSignUp.setOnClickListener {
             val intent = Intent(this, SignUpActivity::class.java)
             signUpLauncher.launch(intent)
@@ -67,7 +96,9 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun goToMain() {
-        startActivity(Intent(this, MainActivity::class.java))
+        startActivity(Intent(this, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+        })
         finish()
     }
 }

@@ -49,7 +49,7 @@ class SettingActivity : AppCompatActivity() {
                         "회원정보 수정" -> Toast.makeText(this, "${item.title} 클릭됨", Toast.LENGTH_SHORT).show()
                         "로그아웃" -> {
                             Toast.makeText(this, "${item.title} 클릭됨", Toast.LENGTH_SHORT).show()
-                            UserManager.logout()
+                            UserManager.logout(this@SettingActivity)
                             navigateToLogin()
                         }
                         "회원 탈퇴" -> {

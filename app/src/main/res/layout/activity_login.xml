@@ -40,6 +40,20 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp" />
 
+    <Button
+        android:id="@+id/btnGoogle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Sign in with Google"
+        android:layout_marginTop="16dp"/>
+
+    <Button
+        android:id="@+id/btnKakao"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Sign in with Kakao"
+        android:layout_marginTop="8dp"/>
+
     <!-- 회원가입 버튼 -->
     <Button
         android:id="@+id/btnSignup"

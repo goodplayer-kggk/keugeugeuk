@@ -3,4 +3,5 @@
     <string name="scratch_result_icon">value of reward</string>
     <string name="exchange_points_default">보유 포인트: 0 P</string>
     <string name="exchange_points_fmt">보유 포인트: %1$d P</string>
+    <string name="web_client_id">220388603789-9an2of3cqamnu9s7hr3e62sv7jt7cu5k.apps.googleusercontent.com</string>
 </resources>
