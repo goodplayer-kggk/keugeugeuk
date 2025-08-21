@@ -47,6 +47,7 @@ object UserManager {
         val savedPassword = prefs.getString(KEY_PASSWORD, null)
 
         return if (username == savedUsername && password == savedPassword) {
+            //TODO: Backend 서버와 Point/History 관련 동기화
             prefs.edit().putBoolean(KEY_IS_LOGGED_IN, true).apply()
             true
         } else false
@@ -79,6 +80,7 @@ object UserManager {
                 val tokenCred = GoogleIdTokenCredential.createFrom(result.credential.data)
                 val idToken = tokenCred.idToken
 
+                //TODO: Backend 서버와 Point/History 관련 동기화
                 // 서버 검증 및 저장
                 saveLoginState("google", idToken)
             } else {
@@ -99,12 +101,12 @@ object UserManager {
                 suspendCoroutine<String?> { cont ->
                     if (UserApiClient.instance.isKakaoTalkLoginAvailable(activity)) {
                         UserApiClient.instance.loginWithKakaoTalk(activity) { token, error ->
-                            if (error != null) cont.resume(null)
+                            if (error != null) cont.resume(null) //TODO: Backend 서버와 Point/History 관련 동기화
                             else cont.resume(token?.accessToken)
                         }
                     } else {
                         UserApiClient.instance.loginWithKakaoAccount(activity) { token, error ->
-                            if (error != null) cont.resume(null)
+                            if (error != null) cont.resume(null) //TODO: Backend 서버와 Point/History 관련 동기화
                             else cont.resume(token?.accessToken)
                         }
                     }
@@ -123,8 +125,8 @@ object UserManager {
     @SuppressLint("CommitPrefEdits")
     fun logout(activity: Activity) {
         val provider = prefs.getString(KEY_SOCIAL_PROVIDER, null)
-        if(!provider.isNullOrBlank()){
-            when(provider) {
+        if(!provider.isNullOrBlank()) {
+            when (provider) {
                 "google" -> {
                     val credentialManager = CredentialManager.create(activity.applicationContext)
                     CoroutineScope(Dispatchers.Main).launch {
@@ -138,6 +140,7 @@ object UserManager {
                         }
                     }
                 }
+
                 "kakao" -> {
                     UserApiClient.instance.logout { error ->
                         if (error != null) {
@@ -148,13 +151,10 @@ object UserManager {
                     }
                 }
             }
-            prefs.edit()
-                .remove(KEY_SOCIAL_PROVIDER)
-                .remove(KEY_USER_TOKEN)
-                .putBoolean(KEY_IS_LOGGED_IN, false)
-                .apply()
-        } else
-            prefs.edit().putBoolean(KEY_IS_LOGGED_IN, false).apply()
+        }
+        // 🔑 로컬 데이터 전부 삭제 (포인트, 히스토리 포함)
+        prefs.edit().clear().apply()
+        Log.d("UserManager", "Local prefs cleared after logout")
     }
 
     fun saveLoginState(provider: String, idToken: String) {
@@ -209,9 +209,12 @@ object UserManager {
             }
         }
 
-        // 공통 처리 (앱 내 저장 데이터 초기화)
+        // 🔑 서버 API 호출로 계정 삭제 (향후 구현 예정)
+        // e.g., ApiClient.deleteUserAccount(serverToken)
+
+        // 🔑 로컬 데이터 전부 삭제
         prefs.edit().clear().apply()
-        Log.d("UserManager", "Local user data cleared")
+        Log.d("UserManager", "Local prefs cleared after account deletion")
     }
 
     // ----------------------
