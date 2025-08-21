@@ -13,6 +13,7 @@ import com.goodplayer.keugeugeuk.databinding.ActivityMainBinding
 import com.goodplayer.keugeugeuk.ui.settings.SettingActivity
 import com.google.android.gms.ads.MobileAds
 import androidx.navigation.ui.setupWithNavController
+import com.goodplayer.keugeugeuk.auth.UserManager
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -25,6 +26,7 @@ class MainActivity : AppCompatActivity() {
 
         // 툴바를 SupportActionBar로 지정
         setSupportActionBar(binding.toolbar)
+        binding.toolbar.subtitle = UserManager.getNickname()
 
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment

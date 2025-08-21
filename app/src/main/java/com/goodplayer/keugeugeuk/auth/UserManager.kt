@@ -25,6 +25,7 @@ object UserManager {
     private const val PREF_NAME = "user_prefs"
     private const val KEY_IS_LOGGED_IN = "is_logged_in"
     private const val KEY_USERNAME = "username"
+    private const val KEY_USER_NICKNAME = "user_nickname"
     private const val KEY_PASSWORD = "password"
     private const val KEY_USER_POINT = "user_point"
     private const val KEY_USER_HISTORY = "user_history"
@@ -161,6 +162,7 @@ object UserManager {
         prefs.edit()
             .putBoolean(KEY_IS_LOGGED_IN, true)
             .putString(KEY_USER_TOKEN, idToken)
+            .putString(KEY_USER_NICKNAME, provider + " boy") //TODO: generate nickname randomly
             .putString(KEY_SOCIAL_PROVIDER, provider)
             .apply()
     }
@@ -170,6 +172,7 @@ object UserManager {
         return if (savedUser == null) {
             prefs.edit()
                 .putString(KEY_USERNAME, username)
+                .putString(KEY_USER_NICKNAME, "달리는 크그극") //TODO: generate nickname randomly with username
                 .putString(KEY_PASSWORD, password)
                 .apply()
             true
@@ -216,6 +219,9 @@ object UserManager {
         prefs.edit().clear().apply()
         Log.d("UserManager", "Local prefs cleared after account deletion")
     }
+
+    fun getNickname(): String? = prefs.getString(KEY_USER_NICKNAME, null)
+    fun getUserName(): String? = prefs.getString(KEY_USERNAME, null)
 
     // ----------------------
     // ✅ Point 관리
