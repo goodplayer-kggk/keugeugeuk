@@ -19,6 +19,8 @@ import com.kakao.sdk.user.UserApiClient
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
+data class PointHistory(val amount: Int, val reason: String)
+
 object UserManager {
     private const val PREF_NAME = "user_prefs"
     private const val KEY_IS_LOGGED_IN = "is_logged_in"
@@ -30,6 +32,7 @@ object UserManager {
     private const val KEY_USER_TOKEN = "user_token"
 
     private lateinit var prefs: SharedPreferences
+    private val gson = Gson()
 
     fun init(context: Context) {
         if (!::prefs.isInitialized) {
@@ -211,33 +214,43 @@ object UserManager {
         Log.d("UserManager", "Local user data cleared")
     }
 
-    // --- 포인트 관리 ---
-    fun getPoint(): Int = prefs.getInt(KEY_USER_POINT, 0)
+    // ----------------------
+    // ✅ Point 관리
+    // ----------------------
+    fun getPoints(): Int = prefs.getInt(KEY_USER_POINT, 0)
 
-    fun addPoint(value: Int) {
-        val current = getPoint()
-        prefs.edit().putInt(KEY_USER_POINT, current + value).apply()
+    fun addPoints(amount: Int, reason: String = "Ad") {
+        if (amount <= 0) return
+        val newVal = getPoints() + amount
+        prefs.edit().putInt(KEY_USER_POINT, newVal).apply()
+        saveHistory(PointHistory(amount, reason))
     }
 
-    fun resetPoint() {
-        prefs.edit().putInt(KEY_USER_POINT, 0).apply()
+    fun deductPoints(amount: Int, reason: String = "Exchange"): Boolean {
+        if (amount <= 0) return false
+        val cur = getPoints()
+        if (cur < amount) return false
+        prefs.edit().putInt(KEY_USER_POINT, cur - amount).apply()
+        saveHistory(PointHistory(-amount, reason))
+        return true
     }
 
-    // --- 히스토리 관리 ---
-    fun getHistory(): List<String> {
-        val json = prefs.getString(KEY_USER_HISTORY, "[]")
-        val type = object : TypeToken<List<String>>() {}.type
-        return Gson().fromJson(json, type)
+    // ----------------------
+    // ✅ History 관리
+    // ----------------------
+    fun getHistory(): List<PointHistory> {
+        val json = prefs.getString(KEY_USER_HISTORY, "[]") ?: "[]"
+        val type = object: TypeToken<List<PointHistory>>() {}.type
+        return gson.fromJson(json, type)
     }
 
-    fun addHistory(entry: String) {
+    private fun saveHistory(entry: PointHistory) {
         val list = getHistory().toMutableList()
-        list.add(entry)
-        val json = Gson().toJson(list)
-        prefs.edit().putString(KEY_USER_HISTORY, json).apply()
+        list.add(0, entry)
+        prefs.edit().putString(KEY_USER_HISTORY, gson.toJson(list)).apply()
     }
 
     fun clearHistory() {
-        prefs.edit().putString(KEY_USER_HISTORY, "[]").apply()
+        prefs.edit().remove(KEY_USER_HISTORY).apply()
     }
 }

@@ -6,15 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.goodplayer.keugeugeuk.MainActivity
 import com.goodplayer.keugeugeuk.R
-import com.goodplayer.keugeugeuk.util.PointsManager
+import com.goodplayer.keugeugeuk.auth.UserManager
 import com.goodplayer.keugeugeuk.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-    private val pm by lazy { PointsManager(requireContext()) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
@@ -38,7 +36,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun updatePoints() {
-        binding.tvPoints.text = "${pm.getPoints()} P"
+        binding.tvPoints.text = "${UserManager.getPoints()} P"
     }
 
     override fun onDestroyView() {

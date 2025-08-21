@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.goodplayer.keugeugeuk.R
-import com.goodplayer.keugeugeuk.util.PointsManager
+import com.goodplayer.keugeugeuk.auth.UserManager
 import com.goodplayer.keugeugeuk.util.PointGenerator
 import com.goodplayer.keugeugeuk.databinding.FragmentScratchBinding
 import com.google.android.gms.ads.AdRequest
@@ -21,7 +21,6 @@ class ScratchFragment : Fragment() {
 
     private var _binding: FragmentScratchBinding? = null
     private val binding get() = _binding!!
-    private val pm by lazy { PointsManager(requireContext()) }
     private var interstitialAd: InterstitialAd? = null
 
     private val animalAnimations = listOf(
@@ -82,7 +81,7 @@ class ScratchFragment : Fragment() {
             interstitialAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
                 override fun onAdDismissedFullScreenContent() {
                     val reward = PointGenerator.generatePoint()
-                    pm.addPoints(reward)
+                    UserManager.addPoints(reward)
                     goToResult(reward)
                 }
 
