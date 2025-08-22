@@ -19,9 +19,6 @@ class ExchangeFragment : Fragment(R.layout.fragment_exchange) {
     private val vm: ExchangeViewModel by viewModels()
     private lateinit var adapter: RewardAdapter
 
-    // TODO: 실제 로그인 시스템 연동 시 교체
-    private val fakeUserId = "user_001"
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         _binding = FragmentExchangeBinding.bind(view)
         adapter = RewardAdapter(
@@ -65,7 +62,7 @@ class ExchangeFragment : Fragment(R.layout.fragment_exchange) {
             .setMessage("${item.name}(${item.costPoints}P)로 교환하시겠어요?")
             .setNegativeButton("취소", null)
             .setPositiveButton("교환") { _, _ ->
-                vm.exchange(fakeUserId, item)
+                vm.exchange(item)
             }
             .show()
     }

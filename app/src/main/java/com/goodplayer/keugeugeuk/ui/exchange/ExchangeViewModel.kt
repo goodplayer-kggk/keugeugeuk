@@ -37,7 +37,7 @@ class ExchangeViewModel(app: Application) : AndroidViewModel(app) {
         _points.value = UserManager.getPoints()
     }
 
-    fun exchange(userId: String, item: RewardItem) = viewModelScope.launch {
+    fun exchange(item: RewardItem) = viewModelScope.launch {
         // 포인트 확인 & 차감
         if (!UserManager.deductPoints(item.costPoints)) {
             _exchangeResult.value = ExchangeResult(false, message = "포인트가 부족합니다.")
@@ -47,7 +47,7 @@ class ExchangeViewModel(app: Application) : AndroidViewModel(app) {
 
         // (샘플) 서버 교환 호출
         _loading.value = true
-        val result = repo.exchangeReward(userId, item.id)
+        val result = repo.exchangeReward(item.id)
         _loading.value = false
 
         // 실패 시 포인트 롤백

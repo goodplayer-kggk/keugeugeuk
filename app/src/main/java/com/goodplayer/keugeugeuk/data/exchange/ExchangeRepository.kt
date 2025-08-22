@@ -47,7 +47,7 @@ class ExchangeRepository {
     }
 
     // 데모용 교환 API 시뮬레이션
-    suspend fun exchangeReward(userId: String, rewardId: String): ExchangeResult {
+    suspend fun exchangeReward(rewardId: String): ExchangeResult {
         delay(500) // 네트워크 지연 흉내
         val stock = inventory[rewardId] ?: 0
         if (stock <= 0) {
