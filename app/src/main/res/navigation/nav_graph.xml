@@ -19,9 +19,9 @@
 
     <fragment
         android:id="@+id/rewardsFragment"
-        android:name="com.goodplayer.keugeugeuk.ui.RewardsFragment"
+        android:name="com.goodplayer.keugeugeuk.ui.history.HistoryFragment"
         android:label="Rewards"
-        tools:layout="@layout/fragment_rewards" />
+        tools:layout="@layout/fragment_history" />
 
     <fragment
         android:id="@+id/exchangeFragment"

@@ -15,6 +15,7 @@
         app:title="Keugeugeuk"
         app:titleTextColor="@android:color/white"
         app:subtitle="nickname"
+        app:subtitleTextColor="@android:color/white"
         app:menu="@menu/menu_main"/>
 
     <!-- Fragment Container -->

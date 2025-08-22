@@ -19,7 +19,7 @@ import com.kakao.sdk.user.UserApiClient
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-data class PointHistory(val amount: Int, val reason: String)
+data class PointHistory(val amount: Int, val reason: String, val timestamp: Long = System.currentTimeMillis())
 
 object UserManager {
     private const val PREF_NAME = "user_prefs"

@@ -24,7 +24,6 @@ class ExchangeFragment : Fragment(R.layout.fragment_exchange) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         _binding = FragmentExchangeBinding.bind(view)
-
         adapter = RewardAdapter(
             onClick = { item -> confirmAndExchange(item) }
         )

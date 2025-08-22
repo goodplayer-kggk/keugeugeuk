@@ -33,7 +33,6 @@ class LifeTipsFragment : Fragment() {
             intent.putExtra("tip_title", tip.title)
             intent.putExtra("tip_description", tip.summary)
             intent.putExtra("tip_image", R.drawable.ic_launcher_foreground) // ic_tip_image 샘플 이미지
-//            intent.putExtra("tip_id", tip.id)
             startActivity(intent)
         }
     }
