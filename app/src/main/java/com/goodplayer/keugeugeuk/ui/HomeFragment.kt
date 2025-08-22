@@ -28,7 +28,7 @@ class HomeFragment : Fragment() {
             findNavController().navigate(R.id.lifeTipsFragment)
         }
         binding.btnRewards.setOnClickListener {
-            findNavController().navigate(R.id.rewardsFragment)
+            findNavController().navigate(R.id.historyFragment)
         }
         binding.btnExchange.setOnClickListener {
             findNavController().navigate(R.id.exchangeFragment)

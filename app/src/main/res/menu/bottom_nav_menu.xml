@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/homeFragment" android:title="홈" android:icon="@android:drawable/ic_menu_view"/>
     <item android:id="@+id/scratchFragment" android:title="긁기" android:icon="@android:drawable/ic_menu_edit"/>
-    <item android:id="@+id/rewardsFragment" android:title="포인트" android:icon="@android:drawable/ic_menu_info_details"/>
+    <item android:id="@+id/historyFragment" android:title="포인트" android:icon="@android:drawable/ic_menu_info_details"/>
     <item android:id="@+id/exchangeFragment" android:title="교환소" android:icon="@android:drawable/ic_menu_share"/>
     <item android:id="@+id/lifeTipsFragment" android:title="생활팁" android:icon="@android:drawable/ic_menu_agenda"/>
 </menu>

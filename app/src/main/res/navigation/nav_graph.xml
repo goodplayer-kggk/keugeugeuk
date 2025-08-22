@@ -8,30 +8,30 @@
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.goodplayer.keugeugeuk.ui.HomeFragment"
-        android:label="Home"
+        android:label="홈"
         tools:layout="@layout/fragment_home" />
 
     <fragment
         android:id="@+id/scratchFragment"
         android:name="com.goodplayer.keugeugeuk.ui.scratch.ScratchFragment"
-        android:label="Scratch"
+        android:label="긁기"
         tools:layout="@layout/fragment_scratch" />
 
     <fragment
-        android:id="@+id/rewardsFragment"
+        android:id="@+id/historyFragment"
         android:name="com.goodplayer.keugeugeuk.ui.history.HistoryFragment"
-        android:label="Rewards"
+        android:label="포인트내역"
         tools:layout="@layout/fragment_history" />
 
     <fragment
         android:id="@+id/exchangeFragment"
         android:name="com.goodplayer.keugeugeuk.ui.exchange.ExchangeFragment"
-        android:label="Exchange"
+        android:label="교환소"
         tools:layout="@layout/fragment_exchange" />
 
     <fragment
         android:id="@+id/lifeTipsFragment"
         android:name="com.goodplayer.keugeugeuk.ui.lifetip.LifeTipsFragment"
-        android:label="LifeTips"
+        android:label="생활팁"
         tools:layout="@layout/fragment_lifetips" />
 </navigation>
