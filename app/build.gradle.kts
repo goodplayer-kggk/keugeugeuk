@@ -70,6 +70,9 @@ dependencies {
     implementation ("com.kakao.sdk:v2-user:2.21.6")
     implementation ("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.0")
 
+    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
+
 //    implementation(libs.androidx.core.ktx)
 //    implementation(libs.androidx.appcompat)
 //    implementation(libs.material)

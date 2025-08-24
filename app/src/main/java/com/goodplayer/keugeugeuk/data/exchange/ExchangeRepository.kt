@@ -5,6 +5,8 @@ import com.goodplayer.keugeugeuk.data.exchange.model.ExchangeResult
 import com.goodplayer.keugeugeuk.data.exchange.model.RewardItem
 import kotlinx.coroutines.delay
 import kotlin.random.Random
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 class ExchangeRepository {
 
@@ -12,7 +14,8 @@ class ExchangeRepository {
     private val inventory = mutableMapOf(
         "coffee_americano" to 50,
         "cvs_5000" to 30,
-        "movie_ticket" to 20
+        "movie_ticket" to 20,
+        "lottory_number" to 100
     )
 
     // 데모용 상품 목록
@@ -42,6 +45,14 @@ class ExchangeRepository {
                 costPoints = 1500,
                 vendor = "영화 제휴",
                 imageRes = R.drawable.ic_reward_movie
+            ),
+            RewardItem(
+                id = "lottory_number",
+                name = "로또 번호 추천",
+                description = "최신 데이터를 기반으로 분석한 로또번호 추천",
+                costPoints = 10,
+                vendor = "영화 제휴",
+                imageRes = R.drawable.ic_reward_lotto
             )
         )
     }
@@ -56,14 +67,32 @@ class ExchangeRepository {
         // 재고 차감
         inventory[rewardId] = stock - 1
 
-        // 쿠폰 코드 생성 (샘플)
-        val code = buildString {
-            append(rewardId.take(4).uppercase())
-            append('-')
-            append(Random.nextInt(1000, 9999))
-            append('-')
-            append(Random.nextInt(1000, 9999))
+        if(rewardId == "lottory_number"){
+            val repository = LottoRepository()
+            val _recommendNumbers = MutableStateFlow<List<Int>>(emptyList())
+
+            val results = repository.fetchLast100Results(1186)
+            _recommendNumbers.value = repository.recommendNumbers(results)
+            val recommendNumbers: StateFlow<List<Int>> = _recommendNumbers
+
+            val code = buildString {
+                recommendNumbers.value.forEach { num ->
+                    append(num.toString())
+                    append(' ')
+                }
+            }
+
+            return ExchangeResult(true, couponCode = code, message = "교환 완료")
+        } else {
+            // 쿠폰 코드 생성 (샘플)
+            val code = buildString {
+                append(rewardId.take(4).uppercase())
+                append('-')
+                append(Random.nextInt(1000, 9999))
+                append('-')
+                append(Random.nextInt(1000, 9999))
+            }
+            return ExchangeResult(true, couponCode = code, message = "교환 완료")
         }
-        return ExchangeResult(true, couponCode = code, message = "교환 완료")
     }
 }
