@@ -3,6 +3,7 @@ package com.goodplayer.keugeugeuk.data.exchange
 import com.goodplayer.keugeugeuk.R
 import com.goodplayer.keugeugeuk.data.exchange.model.ExchangeResult
 import com.goodplayer.keugeugeuk.data.exchange.model.RewardItem
+import com.google.gson.Gson
 import kotlinx.coroutines.delay
 import kotlin.random.Random
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -71,7 +72,9 @@ class ExchangeRepository {
             val repository = LottoRepository()
             val _recommendNumbers = MutableStateFlow<List<Int>>(emptyList())
 
-            val results = repository.fetchLast100Results(1186)
+            val results = repository.fetchLast100Results(repository.fetchLatestDrawNo(), LottoManager.getLastFetchedDrawNo())
+            LottoManager.saveRecent100Data(Gson().toJson(results))
+
             _recommendNumbers.value = repository.recommendNumbers(results)
             val recommendNumbers: StateFlow<List<Int>> = _recommendNumbers
 

@@ -1,5 +1,7 @@
 package com.goodplayer.keugeugeuk.data.exchange
 
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.Retrofit
@@ -22,7 +24,8 @@ data class LottoResponse(
 
 data class LottoDraw(
     val round: Int,
-    val numbers: List<Int> // size = 6, values 1..45
+    val numbers: List<Int>, // size = 6, values 1..45
+    val bonus: Int
 )
 
 interface LottoApi {
@@ -36,15 +39,15 @@ object LottoRecommender {
         val freq = IntArray(46) // 1..45
         draws.forEach { d -> d.numbers.forEach { n -> freq[n]++ } }
 
-        val g34   = mutableListOf<Int>() // 3~4회
-        val g57   = mutableListOf<Int>() // 5~7회
-        val lowHi = mutableListOf<Int>() // 1~2회 + 8회이상
+        val g1114   = mutableListOf<Int>() // 11~14회
+        val g1519   = mutableListOf<Int>() // 15~19회
+        val lowHi = mutableListOf<Int>() // 1~10회 + 19회이상
 
         for (n in 1..45) {
             when (freq[n]) {
-                in 3..4   -> g34 += n
-                in 5..7   -> g57 += n
-                else      -> if (freq[n] in 1..2 || freq[n] >= 8) lowHi += n
+                in 11..14 -> g1114 += n
+                in 15..19 -> g1519 += n
+                else -> if (freq[n] in 1..11 || freq[n] >= 20) lowHi += n
             }
         }
 
@@ -68,17 +71,17 @@ object LottoRecommender {
             }
         }
 
-        pickFrom(g34, 2)   // 3~4회에서 2개
-        pickFrom(g57, 4)   // 5~7회에서 2개 + (다 못 뽑으면 다음 단계에서 보충)
-        while (pick.size < 4 && g57.isNotEmpty()) {
-            val n = g57.random()
+        pickFrom(g1114, 3)   // 11~14회에서 3개
+        pickFrom(g1519, 5)   // 15~19회에서 2개 + (다 못 뽑으면 다음 단계에서 보충)
+        while (pick.size < 5 && g1519.isNotEmpty()) {
+            val n = g1519.random()
             pick += n
-            g57.remove(n)
+            g1519.remove(n)
         }
-        while (pick.size < 4 && g34.isNotEmpty()) { // 보충
-            val n = g34.random()
+        while (pick.size < 5 && g1114.isNotEmpty()) { // 보충
+            val n = g1114.random()
             pick += n
-            g34.remove(n)
+            g1114.remove(n)
         }
 
         // 나머지 2개: 저빈도/고빈도(=lowHi)에서
@@ -106,19 +109,50 @@ class LottoRepository {
 
     private val api = retrofit.create(LottoApi::class.java)
 
-    suspend fun fetchLast100Results(latestDraw: Int): List<LottoResponse> =
+    suspend fun fetchLatestDrawNo(): Int {
+        var latest = LottoManager.getLastFetchedDrawNo()
+        var next = latest
+
+        while (true) {
+            val response = api.getLottoNumbers(next)
+            if (response.returnValue == "fail") break
+            next++
+        }
+        LottoManager.setLastFetchedDrawNo(next-1)
+        return next-1
+    }
+
+    suspend fun fetchLast100Results(latestDraw: Int, savedDraw: Int): List<LottoResponse> =
         withContext(Dispatchers.IO) {
             val results = mutableListOf<LottoResponse>()
-            for (i in (latestDraw - 99)..latestDraw) {
+            var diff = latestDraw - savedDraw
+            diff = if(diff <= 103) diff else 103
+
+            for (i in (latestDraw - diff)..latestDraw) {
                 try {
                     val res = api.getLottoNumbers(i)
                     if (res.returnValue == "success") results.add(res)
                 } catch (_: Exception) { }
             }
-            results
+
+            if(results.size == 104)
+                results
+            else {
+                var recLottoResponse = LottoManager.loadRecent100Data()
+                val jsonRecLottoResponse = Gson().fromJson<List<LottoResponse>>(
+                    recLottoResponse,
+                    object : TypeToken<List<LottoResponse>>() {}.type
+                )
+                jsonRecLottoResponse.forEach{ j ->
+                    results.add(j)
+                    if(results.size >= 104)
+                        return@forEach
+                }
+                results
+            }
         }
 
-    fun recommendNumbers(results: List<LottoResponse>): List<Int> {
+    fun converterResponseToDraw(results: List<LottoResponse>): List<LottoDraw> {
         var draws = mutableListOf<LottoDraw>()
 
         results.forEach { r ->
@@ -130,9 +164,13 @@ class LottoRepository {
             nums += r.drwtNo5
             nums += r.drwtNo6
 
-            val draw = LottoDraw(r.drwNo, nums)
+            val draw = LottoDraw(r.drwNo, nums, r.bnusNo)
             draws += draw
         }
-        return LottoRecommender.recommendFrom(draws)
+        return draws
+    }
+
+    fun recommendNumbers(results: List<LottoResponse>): List<Int> {
+        return LottoRecommender.recommendFrom(converterResponseToDraw(results))
     }
 }

@@ -7,6 +7,7 @@ import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import com.goodplayer.keugeugeuk.auth.LoginActivity
 import com.goodplayer.keugeugeuk.auth.UserManager
+import com.goodplayer.keugeugeuk.data.exchange.LottoManager
 import com.kakao.sdk.common.KakaoSdk
 
 class SplashActivity : AppCompatActivity() {
@@ -18,6 +19,7 @@ class SplashActivity : AppCompatActivity() {
 
         // ✅ UserManager 초기화 (앱 전역에서 SharedPreferences 접근 가능)
         UserManager.init(applicationContext)
+        LottoManager.init(applicationContext)
 
         // 1.5초 후 실행 (로고 애니메이션 시간용)
         Handler(Looper.getMainLooper()).postDelayed({
