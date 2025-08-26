@@ -39,20 +39,19 @@ class ExchangeViewModel(app: Application) : AndroidViewModel(app) {
 
     fun exchange(item: RewardItem) = viewModelScope.launch {
         // 포인트 확인 & 차감
-        if (!UserManager.deductPoints(item.costPoints)) {
+        if(UserManager.getPoints() < item.costPoints) {
             _exchangeResult.value = ExchangeResult(false, message = "포인트가 부족합니다.")
             return@launch
         }
-        _points.value = UserManager.getPoints()
 
         // (샘플) 서버 교환 호출
         _loading.value = true
         val result = repo.exchangeReward(item.id)
         _loading.value = false
 
-        // 실패 시 포인트 롤백
-        if (!result.success) {
-            UserManager.addPoints(item.costPoints)
+        // 성공 시 포인트 차감 및 History 추가
+        if (result.success) {
+            result.couponCode?.let { UserManager.deductPoints(item.costPoints, result.message + " - " + it) }
             _points.value = UserManager.getPoints()
         }
 

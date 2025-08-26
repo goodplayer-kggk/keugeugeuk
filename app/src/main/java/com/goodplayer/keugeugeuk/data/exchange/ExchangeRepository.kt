@@ -75,7 +75,7 @@ class ExchangeRepository {
             val results = repository.fetchLast100Results(repository.fetchLatestDrawNo(), LottoManager.getLastFetchedDrawNo())
             LottoManager.saveRecent100Data(Gson().toJson(results))
 
-            _recommendNumbers.value = repository.recommendNumbers(results)
+            _recommendNumbers.value = repository.recommendNumbers(results).sorted()
             val recommendNumbers: StateFlow<List<Int>> = _recommendNumbers
 
             val code = buildString {
@@ -85,7 +85,7 @@ class ExchangeRepository {
                 }
             }
 
-            return ExchangeResult(true, couponCode = code, message = "교환 완료")
+            return ExchangeResult(true, couponCode = code, message = "로또 번호 추천")
         } else {
             // 쿠폰 코드 생성 (샘플)
             val code = buildString {
@@ -95,7 +95,7 @@ class ExchangeRepository {
                 append('-')
                 append(Random.nextInt(1000, 9999))
             }
-            return ExchangeResult(true, couponCode = code, message = "교환 완료")
+            return ExchangeResult(true, couponCode = code, message = "쿠폰 교환")
         }
     }
 }
