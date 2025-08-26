@@ -1,22 +1,16 @@
 package com.goodplayer.keugeugeuk.data.exchange
 
+import com.goodplayer.keugeugeuk.data.exchange.model.LottoApi
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.GET
-import retrofit2.http.Query
 
 import com.goodplayer.keugeugeuk.data.exchange.model.LottoResponse
 import com.goodplayer.keugeugeuk.data.exchange.model.LottoDraw
 import com.goodplayer.keugeugeuk.data.exchange.model.LottoRecommender
-
-interface LottoApi {
-    @GET("common.do?method=getLottoNumber")
-    suspend fun getLottoNumbers(@Query("drwNo") drwNo: Int): LottoResponse
-}
 
 class LottoRepository {
     private val retrofit = Retrofit.Builder()
@@ -25,6 +19,7 @@ class LottoRepository {
         .build()
 
     private val api = retrofit.create(LottoApi::class.java)
+    private val noOfDraws = 104
 
     suspend fun fetchLatestDrawNo(): Int {
         var latest = LottoManager.getLastFetchedDrawNo()
@@ -32,18 +27,21 @@ class LottoRepository {
 
         while (true) {
             val response = api.getLottoNumbers(next)
-            if (response.returnValue == "fail") break
+            if (response.returnValue == "fail") {
+                next--
+                break
+            }
             next++
         }
-        LottoManager.setLastFetchedDrawNo(next-1)
-        return next-1
+        LottoManager.setLastFetchedDrawNo(next)
+        return next
     }
 
-    suspend fun fetchLast100Results(latestDraw: Int, savedDraw: Int): List<LottoResponse> =
+    suspend fun fetchLastNResults(latestDraw: Int, savedDraw: Int): List<LottoResponse> =
         withContext(Dispatchers.IO) {
             val results = mutableListOf<LottoResponse>()
             var diff = latestDraw - savedDraw
-            diff = if(diff <= 103) diff else 103
+            diff = if(diff <= (noOfDraws - 1)) diff else noOfDraws - 1
 
             for (i in (latestDraw - diff)..latestDraw) {
                 try {
@@ -52,7 +50,7 @@ class LottoRepository {
                 } catch (_: Exception) { }
             }
 
-            if(results.size == 104)
+            if(results.size == noOfDraws)
                 results
             else {
                 var recLottoResponse = LottoManager.loadRecent100Data()
@@ -62,7 +60,7 @@ class LottoRepository {
                 )
                 jsonRecLottoResponse.forEach{ j ->
                     results.add(j)
-                    if(results.size >= 104)
+                    if(results.size >= noOfDraws)
                         return@forEach
                 }
                 results

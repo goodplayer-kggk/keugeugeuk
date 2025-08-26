@@ -24,6 +24,9 @@ class HistoryAdapter(private var items: List<PointHistory>) :
         val item = items[position]
 
         holder.binding.tvReason.text = item.reason
+        holder.binding.tvReason.setTextColor(
+            if(item.reason.contains("로또")) 0xFFC04DA2.toInt() else 0xFF000000.toInt()
+        )
         holder.binding.tvAmount.text = "${if (item.amount > 0) "+" else ""}${item.amount}P"
         holder.binding.tvAmount.setTextColor(
             if (item.amount > 0) 0xFF2E7D32.toInt() else 0xFFD32F2F.toInt()

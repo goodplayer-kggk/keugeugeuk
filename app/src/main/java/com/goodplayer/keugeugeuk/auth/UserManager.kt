@@ -232,15 +232,14 @@ object UserManager {
         if (amount <= 0) return
         val newVal = getPoints() + amount
         prefs.edit().putInt(KEY_USER_POINT, newVal).apply()
-        saveHistory(PointHistory(amount, reason))
+        saveHistory(PointHistory(amount, reason)) // 임시로 일괄 호출. 향후 제거 가능
     }
-
+    
     fun deductPoints(amount: Int, reason: String = "Exchange"): Boolean {
         if (amount <= 0) return false
         val cur = getPoints()
         if (cur < amount) return false
         prefs.edit().putInt(KEY_USER_POINT, cur - amount).apply()
-        saveHistory(PointHistory(-amount, reason))
         return true
     }
 
@@ -253,7 +252,7 @@ object UserManager {
         return gson.fromJson(json, type)
     }
 
-    private fun saveHistory(entry: PointHistory) {
+    fun saveHistory(entry: PointHistory) {
         val list = getHistory().toMutableList()
         list.add(0, entry)
         prefs.edit().putString(KEY_USER_HISTORY, gson.toJson(list)).apply()

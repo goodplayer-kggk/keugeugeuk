@@ -46,12 +46,12 @@ class ExchangeViewModel(app: Application) : AndroidViewModel(app) {
 
         // (샘플) 서버 교환 호출
         _loading.value = true
-        val result = repo.exchangeReward(item.id)
+        val result = repo.exchangeReward(item)
         _loading.value = false
 
         // 성공 시 포인트 차감 및 History 추가
         if (result.success) {
-            result.couponCode?.let { UserManager.deductPoints(item.costPoints, result.message + " - " + it) }
+            UserManager.deductPoints(item.costPoints)
             _points.value = UserManager.getPoints()
         }
 

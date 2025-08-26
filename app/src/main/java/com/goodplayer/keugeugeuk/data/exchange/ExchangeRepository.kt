@@ -1,6 +1,8 @@
 package com.goodplayer.keugeugeuk.data.exchange
 
 import com.goodplayer.keugeugeuk.R
+import com.goodplayer.keugeugeuk.auth.PointHistory
+import com.goodplayer.keugeugeuk.auth.UserManager
 import com.goodplayer.keugeugeuk.data.exchange.model.ExchangeResult
 import com.goodplayer.keugeugeuk.data.exchange.model.RewardItem
 import com.google.gson.Gson
@@ -59,8 +61,9 @@ class ExchangeRepository {
     }
 
     // 데모용 교환 API 시뮬레이션
-    suspend fun exchangeReward(rewardId: String): ExchangeResult {
+    suspend fun exchangeReward(item: RewardItem): ExchangeResult {
         delay(500) // 네트워크 지연 흉내
+        val rewardId = item.id
         val stock = inventory[rewardId] ?: 0
         if (stock <= 0) {
             return ExchangeResult(false, message = "재고가 없습니다.")
@@ -71,8 +74,9 @@ class ExchangeRepository {
         if(rewardId == "lottory_number"){
             val repository = LottoRepository()
             val _recommendNumbers = MutableStateFlow<List<Int>>(emptyList())
+            var lastDrawNo = repository.fetchLatestDrawNo()
 
-            val results = repository.fetchLast100Results(repository.fetchLatestDrawNo(), LottoManager.getLastFetchedDrawNo())
+            val results = repository.fetchLastNResults(lastDrawNo, LottoManager.getLastFetchedDrawNo())
             LottoManager.saveRecent100Data(Gson().toJson(results))
 
             _recommendNumbers.value = repository.recommendNumbers(results).sorted()
@@ -84,7 +88,10 @@ class ExchangeRepository {
                     append(' ')
                 }
             }
-
+            lastDrawNo++
+            UserManager.saveHistory(
+                PointHistory(-item.costPoints, "로또 $lastDrawNo 회차 추천 - ${recommendNumbers.value.joinToString(", ")}")
+            )
             return ExchangeResult(true, couponCode = code, message = "로또 번호 추천")
         } else {
             // 쿠폰 코드 생성 (샘플)
@@ -95,6 +102,7 @@ class ExchangeRepository {
                 append('-')
                 append(Random.nextInt(1000, 9999))
             }
+            UserManager.saveHistory(PointHistory(-item.costPoints, rewardId + " 쿠폰 교환"))
             return ExchangeResult(true, couponCode = code, message = "쿠폰 교환")
         }
     }
