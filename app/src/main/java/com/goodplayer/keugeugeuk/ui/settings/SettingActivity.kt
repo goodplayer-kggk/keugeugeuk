@@ -11,6 +11,7 @@ import com.goodplayer.keugeugeuk.databinding.ActivitySettingBinding
 import com.goodplayer.keugeugeuk.R
 import com.goodplayer.keugeugeuk.auth.LoginActivity
 import com.goodplayer.keugeugeuk.auth.UserManager
+import com.goodplayer.keugeugeuk.data.exchange.LottoManager
 
 class SettingActivity : AppCompatActivity() {
 
@@ -51,6 +52,7 @@ class SettingActivity : AppCompatActivity() {
                         "로그아웃" -> {
                             Toast.makeText(this, "${item.title} 클릭됨", Toast.LENGTH_SHORT).show()
                             UserManager.logout(this@SettingActivity)
+                            LottoManager.clearData()
                             navigateToLogin()
                         }
                         "회원 탈퇴" -> {
@@ -60,6 +62,7 @@ class SettingActivity : AppCompatActivity() {
                                 .setPositiveButton("탈퇴") { _, _ ->
                                     Toast.makeText(this, "회원 탈퇴 처리 중...", Toast.LENGTH_SHORT).show()
                                     UserManager.deleteAccount(this@SettingActivity)
+                                    LottoManager.clearData()
                                     navigateToLogin()
                                 }
                                 .setNegativeButton("취소", null)

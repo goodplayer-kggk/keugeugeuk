@@ -63,4 +63,8 @@ object LottoManager {
     fun loadRecommendHistory(): JSONArray {
         return JSONArray(prefs.getString(KEY_RECOMMEND_HISTORY, "[]"))
     }
+
+    fun clearData(){
+        prefs.edit().clear().apply()
+    }
 }

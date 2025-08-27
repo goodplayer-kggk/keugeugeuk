@@ -5,14 +5,14 @@ object LottoRecommender {
         val freq = IntArray(46) // 1..45
         draws.forEach { d -> d.numbers.forEach { n -> freq[n]++ } }
 
-        val g1114   = mutableListOf<Int>() // 11~14회
-        val g1519   = mutableListOf<Int>() // 15~19회
-        val lowHi = mutableListOf<Int>() // 1~10회 + 19회이상
+        val g57   = mutableListOf<Int>() // 5~7회
+        val g89   = mutableListOf<Int>() // 8~9회
+        val lowHi = mutableListOf<Int>() // 1~4회 + 9회이상
 
         for (n in 1..45) {
             when (freq[n]) {
-                in 11..14 -> g1114 += n
-                in 15..19 -> g1519 += n
+                in 5..7 -> g57 += n
+                in 8..9 -> g89 += n
                 else -> if (freq[n] in 1..11 || freq[n] >= 20) lowHi += n
             }
         }
@@ -37,17 +37,17 @@ object LottoRecommender {
             }
         }
 
-        pickFrom(g1114, 3)   // 11~14회에서 3개
-        pickFrom(g1519, 5)   // 15~19회에서 2개 + (다 못 뽑으면 다음 단계에서 보충)
-        while (pick.size < 5 && g1519.isNotEmpty()) {
-            val n = g1519.random()
+        pickFrom(g57, 3)   // 11~14회에서 3개
+        pickFrom(g89, 5)   // 15~19회에서 2개 + (다 못 뽑으면 다음 단계에서 보충)
+        while (pick.size < 5 && g89.isNotEmpty()) {
+            val n = g89.random()
             pick += n
-            g1519.remove(n)
+            g89.remove(n)
         }
-        while (pick.size < 5 && g1114.isNotEmpty()) { // 보충
-            val n = g1114.random()
+        while (pick.size < 5 && g57.isNotEmpty()) { // 보충
+            val n = g57.random()
             pick += n
-            g1114.remove(n)
+            g57.remove(n)
         }
 
         // 나머지 2개: 저빈도/고빈도(=lowHi)에서

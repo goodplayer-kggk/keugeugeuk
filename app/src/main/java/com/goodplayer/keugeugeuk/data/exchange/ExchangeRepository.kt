@@ -18,7 +18,7 @@ class ExchangeRepository {
         "coffee_americano" to 50,
         "cvs_5000" to 30,
         "movie_ticket" to 20,
-        "lottory_number" to 100
+        "lottery_number" to 100
     )
 
     // 데모용 상품 목록
@@ -50,9 +50,9 @@ class ExchangeRepository {
                 imageRes = R.drawable.ic_reward_movie
             ),
             RewardItem(
-                id = "lottory_number",
+                id = "lottery_number",
                 name = "로또 번호 추천",
-                description = "최신 데이터를 기반으로 분석한 로또번호 추천",
+                description = "최신 52회 출현빈도 기반으로 분석한 로또번호 추천",
                 costPoints = 10,
                 vendor = "영화 제휴",
                 imageRes = R.drawable.ic_reward_lotto
@@ -71,12 +71,13 @@ class ExchangeRepository {
         // 재고 차감
         inventory[rewardId] = stock - 1
 
-        if(rewardId == "lottory_number"){
+        if(rewardId == "lottery_number"){
             val repository = LottoRepository()
             val _recommendNumbers = MutableStateFlow<List<Int>>(emptyList())
             var lastDrawNo = repository.fetchLatestDrawNo()
 
             val results = repository.fetchLastNResults(lastDrawNo, LottoManager.getLastFetchedDrawNo())
+            LottoManager.setLastFetchedDrawNo(lastDrawNo)
             LottoManager.saveRecent100Data(Gson().toJson(results))
 
             _recommendNumbers.value = repository.recommendNumbers(results).sorted()

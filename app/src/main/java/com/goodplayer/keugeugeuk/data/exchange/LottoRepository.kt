@@ -19,7 +19,7 @@ class LottoRepository {
         .build()
 
     private val api = retrofit.create(LottoApi::class.java)
-    private val noOfDraws = 104
+    private val noOfDraws = 52
 
     suspend fun fetchLatestDrawNo(): Int {
         var latest = LottoManager.getLastFetchedDrawNo()
@@ -33,7 +33,6 @@ class LottoRepository {
             }
             next++
         }
-        LottoManager.setLastFetchedDrawNo(next)
         return next
     }
 
@@ -41,27 +40,28 @@ class LottoRepository {
         withContext(Dispatchers.IO) {
             val results = mutableListOf<LottoResponse>()
             var diff = latestDraw - savedDraw
-            diff = if(diff <= (noOfDraws - 1)) diff else noOfDraws - 1
+            diff = if(diff <= noOfDraws ) diff else noOfDraws
 
-            for (i in (latestDraw - diff)..latestDraw) {
+            for (i in (latestDraw - diff + 1) .. latestDraw ) {
                 try {
                     val res = api.getLottoNumbers(i)
                     if (res.returnValue == "success") results.add(res)
                 } catch (_: Exception) { }
             }
 
-            if(results.size == noOfDraws)
+            if(results.size == noOfDraws) {
                 results
-            else {
+            } else {
                 var recLottoResponse = LottoManager.loadRecent100Data()
                 val jsonRecLottoResponse = Gson().fromJson<List<LottoResponse>>(
                     recLottoResponse,
                     object : TypeToken<List<LottoResponse>>() {}.type
                 )
-                jsonRecLottoResponse.forEach{ j ->
+
+                for(j in jsonRecLottoResponse) {
                     results.add(j)
-                    if(results.size >= noOfDraws)
-                        return@forEach
+                    if (results.size >= noOfDraws)
+                        break
                 }
                 results
             }
