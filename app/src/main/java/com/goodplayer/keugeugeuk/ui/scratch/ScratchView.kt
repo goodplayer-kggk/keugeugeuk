@@ -65,21 +65,27 @@ class ScratchView @JvmOverloads constructor(
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        when (event.action) {
-            MotionEvent.ACTION_DOWN -> {
-                scratchPath.moveTo(event.x, event.y)
+        return if (!isEnabled) {
+            false // disable 상태에서는 터치 무시
+        } else {
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    scratchPath.moveTo(event.x, event.y)
+                }
+
+                MotionEvent.ACTION_MOVE -> {
+                    scratchPath.lineTo(event.x, event.y)
+                    overlayCanvas.drawPath(scratchPath, scratchPaint)
+                    invalidate()
+                }
+
+                MotionEvent.ACTION_UP -> {
+                    scratchPath.reset()
+                    checkScratchCompletion()
+                }
             }
-            MotionEvent.ACTION_MOVE -> {
-                scratchPath.lineTo(event.x, event.y)
-                overlayCanvas.drawPath(scratchPath, scratchPaint)
-                invalidate()
-            }
-            MotionEvent.ACTION_UP -> {
-                scratchPath.reset()
-                checkScratchCompletion()
-            }
+            true
         }
-        return true
     }
 
     fun resetScratch() {

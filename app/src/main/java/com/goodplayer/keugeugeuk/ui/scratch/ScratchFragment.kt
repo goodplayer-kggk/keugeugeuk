@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.goodplayer.keugeugeuk.R
 import com.goodplayer.keugeugeuk.auth.UserManager
@@ -38,6 +39,18 @@ class ScratchFragment : Fragment() {
     ): View {
         _binding = FragmentScratchBinding.inflate(inflater, container, false)
 
+        loadInterstitialAd()
+
+        binding.scratchView.isEnabled = false
+        binding.overlayView.visibility = View.VISIBLE
+
+        showRandomAnimal()
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         // 긁기 완료 리스너
         binding.scratchView.apply {
             scratchThreshold = 20f // 원하는 퍼센트 기준
@@ -47,15 +60,6 @@ class ScratchFragment : Fragment() {
                 }
             })
         }
-
-        showRandomAnimal()
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        loadInterstitialAd()
     }
 
     private fun loadInterstitialAd() {
@@ -67,10 +71,13 @@ class ScratchFragment : Fragment() {
             object : InterstitialAdLoadCallback() {
                 override fun onAdFailedToLoad(adError: LoadAdError) {
                     interstitialAd = null
+                    Toast.makeText(requireContext(), "광고 로딩 실패", Toast.LENGTH_SHORT).show()
                 }
 
                 override fun onAdLoaded(ad: InterstitialAd) {
                     interstitialAd = ad
+                    binding.scratchView.isEnabled = true
+                    binding.overlayView.visibility = View.GONE
                 }
             }
         )
